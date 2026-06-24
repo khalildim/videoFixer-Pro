@@ -102,4 +102,4 @@ Bundled third-party binaries have their own licenses. See `THIRD_PARTY_NOTICES.m
 
 ## Support
 
-If this project helped you, you can support development at https://buymeacoffee.com/khalil_dim.
+[![Buy Me a Coffee](https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png)](https://buymeacoffee.com/khalil_dim)
