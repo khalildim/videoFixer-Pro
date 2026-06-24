@@ -1,0 +1,17 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+.venv/
+venv/
+env/
+
+.download-tools/
+output/
+*.log
+
+# Bundled media tools are downloaded locally and are too large for GitHub.
+app/assets/ffmpeg/*.exe
+app/assets/ffmpeg/*.dll
+app/assets/ffmpeg/*.zip
+app/assets/ffmpeg/*.7z

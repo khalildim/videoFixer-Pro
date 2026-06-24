@@ -91,4 +91,11 @@ pyinstaller --noconfirm --windowed --name VideoFixerPro main.py
 ```
 
 Bundle `ffmpeg.exe`, `ffprobe.exe`, and `untrunc.exe` under `app/assets/ffmpeg/` if you want the packaged app to carry its own tools.
-"# videoFixer-Pro" 
+
+Do not commit large bundled binaries directly to GitHub. Download them locally or attach packaged builds to GitHub Releases.
+
+## License
+
+VideoFixer Pro application code is licensed under the MIT License. See `LICENSE`.
+
+Bundled third-party binaries have their own licenses. See `THIRD_PARTY_NOTICES.md`.
