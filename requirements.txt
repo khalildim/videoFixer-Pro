@@ -1,0 +1,6 @@
+PySide6>=6.7
+pymediainfo>=6.1
+ffmpeg-python>=0.2.0
+send2trash>=1.8
+rich>=13.7
+pydantic>=2.7
