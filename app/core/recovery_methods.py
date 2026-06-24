@@ -107,17 +107,27 @@ def repair_with_untrunc(
     damaged_path = Path(damaged_file).expanduser().resolve()
     output_file = unique_output_path(damaged_path, folder, "untrunc", damaged_path.suffix or ".mp4")
     start_time = time.time()
-    cmd = [
-        settings.resolve_untrunc(),
-        "-n",
-        "-dst",
-        str(output_file),
-        str(Path(reference_file).expanduser().resolve()),
-        str(damaged_path),
-    ]
+    reference_path = Path(reference_file).expanduser().resolve()
+    cmd = _untrunc_command(settings, reference_path, damaged_path, output_file)
     result = run_command(cmd, cwd=folder, log_callback=log_callback, progress_callback=progress_callback, cancel_event=cancel_event)
     found_output = output_file if output_file.exists() and output_file.stat().st_size > 0 else _find_untrunc_output(damaged_path, folder, start_time)
     success = result.success and found_output is not None
+
+    if not success and _should_retry_untrunc_with_skip(result.output):
+        skip_output = unique_output_path(damaged_path, folder, "untrunc_skip", damaged_path.suffix or ".mp4")
+        if log_callback:
+            log_callback("Untrunc suggested skip mode. Retrying with -s to skip unknown sequences...")
+        retry_result = run_command(
+            _untrunc_command(settings, reference_path, damaged_path, skip_output, skip_unknown=True),
+            cwd=folder,
+            log_callback=log_callback,
+            progress_callback=progress_callback,
+            cancel_event=cancel_event,
+        )
+        result = retry_result
+        found_output = skip_output if skip_output.exists() and skip_output.stat().st_size > 0 else _find_untrunc_output(damaged_path, folder, start_time)
+        success = retry_result.success and found_output is not None
+
     if log_callback and not found_output:
         expected = _expected_untrunc_outputs(damaged_path, folder)
         expected.insert(0, output_file)
@@ -130,6 +140,25 @@ def repair_with_untrunc(
         message="Reference-video recovery completed." if success else "Reference-video recovery failed.",
         log=result.output,
     )
+
+
+def _untrunc_command(
+    settings: AppSettings,
+    reference_file: Path,
+    damaged_file: Path,
+    output_file: Path,
+    skip_unknown: bool = False,
+) -> list[str]:
+    cmd = [settings.resolve_untrunc(), "-n"]
+    if skip_unknown:
+        cmd.append("-s")
+    cmd.extend(["-dst", str(output_file), str(reference_file), str(damaged_file)])
+    return cmd
+
+
+def _should_retry_untrunc_with_skip(output: str) -> bool:
+    lower = output.lower()
+    return "try '-s'" in lower or "unknown sequences" in lower or "assertion" in lower
 
 
 def extract_streams(
