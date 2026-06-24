@@ -99,3 +99,7 @@ Do not commit large bundled binaries directly to GitHub. Download them locally o
 VideoFixer Pro application code is licensed under the MIT License. See `LICENSE`.
 
 Bundled third-party binaries have their own licenses. See `THIRD_PARTY_NOTICES.md`.
+
+## Support
+
+If this project helped you, you can support development at https://buymeacoffee.com/khalil_dim.
