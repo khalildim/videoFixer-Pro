@@ -1,6 +1,6 @@
 # VideoFixer Pro
 
-VideoFixer Pro is a Python/PySide6 desktop utility for repairing or recovering damaged MP4, MOV, M4V, and 3GP files. It keeps the original file untouched, writes repaired files to a selected output folder, and saves a repair log for each run.
+VideoFixer Pro is a Python/PySide6 desktop utility for repairing or recovering damaged MP4, MOV, M4V, and 3GP files. It keeps the original file untouched and writes repaired files to a selected output folder.
 
 ## Current Features
 
@@ -16,6 +16,7 @@ VideoFixer Pro is a Python/PySide6 desktop utility for repairing or recovering d
   - Stream extraction and rebuild
 - Worker-thread execution so long FFmpeg jobs do not freeze the UI
 - Settings for FFmpeg, FFprobe, Untrunc, output folder, default mode, CRF, and preset
+- On-screen repair log without saving extra log files beside the videos
 
 ## Requirements
 
@@ -77,7 +78,6 @@ video_repaired_remux.mp4
 video_repaired_faststart.mp4
 video_repaired_reencode.mp4
 video_repaired_extracted.mp4
-video_repair_log_YYYYMMDD_HHMMSS.txt
 ```
 
 MP4 recovery cannot be guaranteed. If media data is missing, no tool can recreate it perfectly. Files missing the `moov` atom often need a healthy reference video recorded with the same device and settings.

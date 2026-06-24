@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import Callable
 
 from app.core.analyzer import analyze_video
-from app.core.file_utils import repair_log_path
 from app.core.recovery_methods import extract_streams, repair_faststart, repair_reencode, repair_remux, repair_with_untrunc
 from app.core.validators import ValidationError, validate_job
 from app.models.app_settings import AppSettings
@@ -57,16 +56,16 @@ def run_repair(
                     result.log,
                 )
 
-        final = _attach_log(result, job, log_lines)
+        final = _attach_log(result, log_lines)
         progress(100 if final.success else 0)
         return final
     except ValidationError as exc:
         result = RepairResult(False, "validation", None, str(exc), "\n".join(log_lines))
-        return _attach_log(result, job, log_lines)
+        return _attach_log(result, log_lines)
     except Exception as exc:
         log(f"Unexpected failure: {exc}")
         result = RepairResult(False, "error", None, "Repair failed because an unexpected error occurred.", "\n".join(log_lines))
-        return _attach_log(result, job, log_lines)
+        return _attach_log(result, log_lines)
 
 
 def _auto_repair(
@@ -160,16 +159,11 @@ def _verify_result(result: RepairResult, settings: AppSettings, log: LogCallback
     return True
 
 
-def _attach_log(result: RepairResult, job: RepairJob, log_lines: list[str]) -> RepairResult:
-    try:
-        path = repair_log_path(job.input_file, job.output_folder)
-        body = "\n".join(log_lines)
-        if result.log and result.log not in body:
-            body = f"{body}\n\n{result.log}".strip()
-        path.write_text(body, encoding="utf-8")
-        return RepairResult(result.success, result.method, result.output_file, result.message, body, str(path))
-    except OSError:
-        return result
+def _attach_log(result: RepairResult, log_lines: list[str]) -> RepairResult:
+    body = "\n".join(log_lines)
+    if result.log and result.log not in body:
+        body = f"{body}\n\n{result.log}".strip()
+    return RepairResult(result.success, result.method, result.output_file, result.message, body, None)
 
 
 def _log_analysis(analysis: VideoInfo, log: LogCallback) -> None:

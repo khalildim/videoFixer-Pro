@@ -3,7 +3,6 @@ from __future__ import annotations
 import os
 import shutil
 import subprocess
-from datetime import datetime
 from pathlib import Path
 
 
@@ -26,12 +25,6 @@ def unique_output_path(input_file: str | Path, output_folder: str | Path, suffix
         candidate = folder / f"{base}_repaired_{suffix}_{index}{extension}"
         index += 1
     return candidate
-
-
-def repair_log_path(input_file: str | Path, output_folder: str | Path) -> Path:
-    folder = ensure_output_folder(output_folder)
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    return folder / f"{Path(input_file).stem}_repair_log_{timestamp}.txt"
 
 
 def has_enough_space(input_file: str | Path, output_folder: str | Path, multiplier: float = 2.0) -> bool:
