@@ -92,7 +92,3 @@ MP4 recovery cannot be guaranteed. If media data is missing, no tool can recreat
 Video Fixer Pro is freeware for personal and non-commercial use only. Commercial use, redistribution, republishing, resale, modified builds, or inclusion in another product requires prior written permission. See `LICENSE`.
 
 Bundled third-party binaries have their own licenses. See `THIRD_PARTY_NOTICES.md`.
-
-## Privacy
-
-Video Fixer Pro processes selected videos locally and does not intentionally upload files, collect analytics, show ads, or require an account. See `PRIVACY.md`.
