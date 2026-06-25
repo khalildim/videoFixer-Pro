@@ -111,6 +111,3 @@ Video Fixer Pro is freeware for personal and non-commercial use only. Commercial
 
 Bundled third-party binaries have their own licenses. See `THIRD_PARTY_NOTICES.md`.
 
-## Privacy
-
-Video Fixer Pro processes selected videos locally and does not intentionally upload files, collect analytics, show ads, or require an account. See `PRIVACY.md`.
