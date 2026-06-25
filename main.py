@@ -52,7 +52,7 @@ def run_gui() -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="VideoFixer Pro MP4/MOV repair utility")
+    parser = argparse.ArgumentParser(description="Video Fixer Pro MP4/MOV repair utility")
     parser.add_argument("--input", help="Damaged video file")
     parser.add_argument("--output", help="Output folder")
     parser.add_argument("--reference", help="Optional healthy reference video")

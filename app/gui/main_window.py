@@ -9,6 +9,7 @@ from PySide6.QtWidgets import QListWidget, QListWidgetItem, QHBoxLayout, QMainWi
 from app.gui.analysis_page import AnalysisPage
 from app.gui.repair_page import RepairPage
 from app.gui.settings_page import SettingsPage
+from app.i18n import t
 from app.models.app_settings import AppSettings
 
 
@@ -16,20 +17,24 @@ class MainWindow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
         self.settings = AppSettings.load()
-        self.setWindowTitle("VideoFixer Pro")
+        self.setWindowTitle("Video Fixer Pro")
         self._set_window_icon()
         self.resize(QSize(1100, 720))
 
         self.sidebar = QListWidget()
         self.sidebar.setObjectName("sidebar")
         self.sidebar.setFixedWidth(210)
-        for label in ["Repair Video", "Analyze Video", "Settings"]:
-            self.sidebar.addItem(QListWidgetItem(label))
+        self.nav_items = []
+        for key in ["repair_video", "analyze_video", "settings"]:
+            item = QListWidgetItem()
+            self.sidebar.addItem(item)
+            self.nav_items.append((item, key))
 
         self.stack = QStackedWidget()
         self.repair_page = RepairPage(self.settings)
         self.analysis_page = AnalysisPage(self.settings)
         self.settings_page = SettingsPage(self.settings)
+        self.settings_page.language_changed.connect(self.retranslate)
         self.stack.addWidget(self.repair_page)
         self.stack.addWidget(self.analysis_page)
         self.stack.addWidget(self.settings_page)
@@ -43,7 +48,16 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.sidebar)
         layout.addWidget(self.stack, 1)
         self.setCentralWidget(root)
+        self.retranslate()
         self._load_stylesheet()
+
+    def retranslate(self) -> None:
+        language = self.settings.language
+        for item, key in self.nav_items:
+            item.setText(t(key, language))
+        self.repair_page.retranslate()
+        self.analysis_page.retranslate()
+        self.settings_page.retranslate()
 
     def _load_stylesheet(self) -> None:
         style_path = Path(__file__).with_name("styles.qss")

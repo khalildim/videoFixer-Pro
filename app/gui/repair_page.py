@@ -19,6 +19,7 @@ from PySide6.QtWidgets import (
 
 from app.core.file_utils import open_folder
 from app.gui.widgets import FilePicker, make_section_title
+from app.i18n import t
 from app.models.app_settings import AppSettings
 from app.models.repair_result import RepairJob, RepairResult
 from app.workers.repair_worker import RepairWorker
@@ -35,29 +36,32 @@ class RepairPage(QWidget):
         self.thread: QThread | None = None
         self.last_output: str | None = None
 
-        self.input_picker = FilePicker("Damaged video")
-        self.reference_picker = FilePicker("Reference video", optional=True)
-        self.output_picker = FilePicker("Output folder", mode="folder")
+        self.input_picker = FilePicker("")
+        self.reference_picker = FilePicker("", optional=True)
+        self.output_picker = FilePicker("", mode="folder")
         if settings.default_output_folder:
             self.output_picker.set_path(settings.default_output_folder)
 
         self.mode_combo = QComboBox()
-        self.mode_combo.addItem("Auto repair", "auto")
-        self.mode_combo.addItem("Remux only", "remux")
-        self.mode_combo.addItem("Faststart / moov relocation", "faststart")
-        self.mode_combo.addItem("Re-encode", "reencode")
-        self.mode_combo.addItem("Recover with reference video", "untrunc")
-        self.mode_combo.addItem("Extract streams", "extract")
+        self.mode_items = [
+            ("auto_repair", "auto"),
+            ("remux_only", "remux"),
+            ("faststart", "faststart"),
+            ("reencode", "reencode"),
+            ("recover_with_reference", "untrunc"),
+            ("extract_streams", "extract"),
+        ]
+        self._populate_modes()
         self._select_mode(settings.default_repair_mode)
 
-        self.start_button = QPushButton("Start Repair")
-        self.cancel_button = QPushButton("Cancel")
-        self.open_output_button = QPushButton("Open Output Folder")
+        self.start_button = QPushButton()
+        self.cancel_button = QPushButton()
+        self.open_output_button = QPushButton()
         self.cancel_button.setEnabled(False)
         self.open_output_button.setEnabled(False)
 
         self.progress = QProgressBar()
-        self.status = QLabel("Ready")
+        self.status = QLabel()
         self.log_view = QTextEdit()
         self.log_view.setReadOnly(True)
 
@@ -69,7 +73,8 @@ class RepairPage(QWidget):
         form.addRow(self.input_picker)
         form.addRow(self.reference_picker)
         form.addRow(self.output_picker)
-        form.addRow("Repair mode", self.mode_combo)
+        self.mode_label = QLabel()
+        form.addRow(self.mode_label, self.mode_combo)
 
         button_row = QHBoxLayout()
         button_row.addWidget(self.start_button)
@@ -77,24 +82,27 @@ class RepairPage(QWidget):
         button_row.addStretch(1)
         button_row.addWidget(self.open_output_button)
 
+        self.section_title = make_section_title("")
         layout = QVBoxLayout(self)
-        layout.addWidget(make_section_title("Repair Video"))
+        layout.addWidget(self.section_title)
         layout.addLayout(form)
         layout.addLayout(button_row)
         layout.addWidget(self.progress)
         layout.addWidget(self.status)
         layout.addWidget(self.log_view, 1)
+        self.retranslate()
 
     def start_repair(self) -> None:
+        language = self.settings.language
         input_file = self.input_picker.path()
         output_folder = self.output_picker.path()
         if not input_file or not output_folder:
-            QMessageBox.warning(self, "Missing input", "Choose a damaged video and an output folder.")
+            QMessageBox.warning(self, t("missing_input", language), t("choose_damaged_video_and_output", language))
             return
 
         self.log_view.clear()
         self.progress.setValue(0)
-        self.status.setText("Repair running...")
+        self.status.setText(t("repair_running", language))
         self.last_output = None
         self.open_output_button.setEnabled(False)
 
@@ -134,6 +142,7 @@ class RepairPage(QWidget):
         self.log_view.moveCursor(QTextCursor.End)
 
     def on_finished(self, result: RepairResult) -> None:
+        language = self.settings.language
         self.start_button.setEnabled(True)
         self.cancel_button.setEnabled(False)
         self.status.setText(result.message)
@@ -141,15 +150,16 @@ class RepairPage(QWidget):
         self.open_output_button.setEnabled(bool(self.last_output))
         self.repair_finished.emit(result)
         if result.success:
-            QMessageBox.information(self, "Repair complete", result.message)
+            QMessageBox.information(self, t("repair_complete", language), result.message)
         else:
-            QMessageBox.warning(self, "Repair failed", result.message)
+            QMessageBox.warning(self, t("repair_failed", language), result.message)
 
     def on_failed(self, message: str) -> None:
+        language = self.settings.language
         self.start_button.setEnabled(True)
         self.cancel_button.setEnabled(False)
         self.status.setText(message)
-        QMessageBox.critical(self, "Repair error", message)
+        QMessageBox.critical(self, t("repair_error", language), message)
 
     def open_output(self) -> None:
         target = self.last_output or self.output_picker.path()
@@ -164,3 +174,30 @@ class RepairPage(QWidget):
         index = self.mode_combo.findData(mode)
         if index >= 0:
             self.mode_combo.setCurrentIndex(index)
+
+    def _populate_modes(self) -> None:
+        current = self.mode_combo.currentData()
+        self.mode_combo.blockSignals(True)
+        self.mode_combo.clear()
+        for key, value in self.mode_items:
+            self.mode_combo.addItem(t(key, self.settings.language), value)
+        if current:
+            self._select_mode(str(current))
+        self.mode_combo.blockSignals(False)
+
+    def retranslate(self) -> None:
+        language = self.settings.language
+        current = self.mode_combo.currentData()
+        self._populate_modes()
+        if current:
+            self._select_mode(str(current))
+        self.input_picker.retranslate(t("damaged_video", language), language)
+        self.reference_picker.retranslate(t("reference_video", language), language)
+        self.output_picker.retranslate(t("output_folder", language), language)
+        self.mode_label.setText(t("repair_mode", language))
+        self.start_button.setText(t("start_repair", language))
+        self.cancel_button.setText(t("cancel", language))
+        self.open_output_button.setText(t("open_output_folder", language))
+        self.section_title.setText(t("repair_video", language))
+        if not self.thread:
+            self.status.setText(t("ready", language))

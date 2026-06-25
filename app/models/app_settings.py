@@ -20,7 +20,7 @@ class AppSettings:
     default_repair_mode: str = "auto"
     overwrite_existing: bool = False
     keep_temp_files: bool = False
-    theme: str = "dark"
+    language: str = "en"
     hardware_acceleration: bool = False
     crf_quality: int = 23
     reencode_preset: str = "medium"

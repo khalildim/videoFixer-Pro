@@ -1,4 +1,4 @@
-# VideoFixer Pro — Python MP4 Repair/Recovery App Plan
+# Video Fixer Pro — Python MP4 Repair/Recovery App Plan
 
 ## 1. Main Idea
 
@@ -121,7 +121,7 @@ Use **PySide6 Widgets** first. It is easier than QML for this type of desktop ut
 
 ```text
 --------------------------------------------------
-| VideoFixer Pro                                 |
+| Video Fixer Pro                                 |
 --------------------------------------------------
 | Sidebar              | Main Content             |
 |                      |                          |

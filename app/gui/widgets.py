@@ -5,12 +5,15 @@ from pathlib import Path
 from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QFileDialog, QHBoxLayout, QLabel, QLineEdit, QPushButton, QWidget
 
+from app.i18n import t
+
 
 class FilePicker(QWidget):
     def __init__(self, label: str, mode: str = "file", optional: bool = False) -> None:
         super().__init__()
         self.mode = mode
         self.optional = optional
+        self.language = "en"
         self.label = QLabel(label)
         self.edit = DropLineEdit()
         self.edit.setPlaceholderText("Optional" if optional else "")
@@ -29,15 +32,21 @@ class FilePicker(QWidget):
     def set_path(self, path: str) -> None:
         self.edit.setText(path)
 
+    def retranslate(self, label: str, language: str) -> None:
+        self.language = language
+        self.label.setText(label)
+        self.button.setText(t("browse", language))
+        self.edit.setPlaceholderText(t("optional", language) if self.optional else "")
+
     def browse(self) -> None:
         if self.mode == "folder":
-            selected = QFileDialog.getExistingDirectory(self, "Select folder", self.path() or str(Path.home()))
+            selected = QFileDialog.getExistingDirectory(self, t("select_folder", self.language), self.path() or str(Path.home()))
         else:
             selected, _ = QFileDialog.getOpenFileName(
                 self,
-                "Select video",
+                t("select_video", self.language),
                 self.path() or str(Path.home()),
-                "Video files (*.mp4 *.mov *.m4v *.3gp);;All files (*.*)",
+                t("video_filter", self.language),
             )
         if selected:
             self.set_path(selected)

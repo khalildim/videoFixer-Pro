@@ -6,12 +6,27 @@ __pycache__/
 venv/
 env/
 
+# Local AI/tooling state
+.agents/
+.codex/
+.impeccable/
+
+# Build and generated output
 .download-tools/
 build/
 dist/
 installer/
 output/
 *.log
+*.tmp
+*.bak
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
 
 # Bundled media tools are downloaded locally and are too large for GitHub.
 app/assets/ffmpeg/*.exe
@@ -20,3 +35,5 @@ app/assets/ffmpeg/*.zip
 app/assets/ffmpeg/*.7z
 VideoFixerPro.iss
 VideoFixerPro.spec
+MICROSOFT_STORE.md
+PRIVACY.md

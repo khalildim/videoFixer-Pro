@@ -1,6 +1,6 @@
 # Third-Party Notices
 
-This repository may include bundled third-party binaries under `app/assets/ffmpeg/` for user convenience. These binaries are not licensed under the VideoFixer Pro application license.
+This repository may include bundled third-party binaries under `app/assets/ffmpeg/` for user convenience. These binaries are not licensed under the Video Fixer Pro application license.
 
 ## FFmpeg And FFprobe
 
@@ -28,4 +28,4 @@ Untrunc and its bundled runtime/library files are distributed under their own up
 
 ## Application Code
 
-The VideoFixer Pro application is freeware for personal and non-commercial use only. See `LICENSE`.
+The Video Fixer Pro application is freeware for personal and non-commercial use only. See `LICENSE`.

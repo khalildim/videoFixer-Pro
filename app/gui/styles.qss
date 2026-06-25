@@ -8,10 +8,12 @@ QMainWindow, QWidget {
 QListWidget#sidebar {
     background: #0f1215;
     border: none;
+    outline: 0;
     padding: 12px;
 }
 
 QListWidget#sidebar::item {
+    border: 1px solid transparent;
     border-radius: 6px;
     padding: 12px;
     margin: 2px 0;
@@ -19,7 +21,14 @@ QListWidget#sidebar::item {
 
 QListWidget#sidebar::item:selected {
     background: #226f54;
+    border: 1px solid transparent;
     color: #ffffff;
+}
+
+QListWidget#sidebar::item:focus,
+QListWidget#sidebar::item:selected:focus {
+    border: 1px solid transparent;
+    outline: none;
 }
 
 QLabel#sectionTitle {

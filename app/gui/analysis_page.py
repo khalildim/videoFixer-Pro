@@ -4,6 +4,7 @@ from PySide6.QtCore import QThread
 from PySide6.QtWidgets import QPushButton, QTextEdit, QVBoxLayout, QWidget, QMessageBox
 
 from app.gui.widgets import FilePicker, make_section_title
+from app.i18n import t
 from app.models.app_settings import AppSettings
 from app.models.video_info import VideoInfo
 from app.workers.analysis_worker import AnalysisWorker
@@ -16,24 +17,27 @@ class AnalysisPage(QWidget):
         self.thread: QThread | None = None
         self.worker: AnalysisWorker | None = None
 
-        self.file_picker = FilePicker("Video file")
-        self.analyze_button = QPushButton("Analyze")
+        self.file_picker = FilePicker("")
+        self.analyze_button = QPushButton()
         self.output = QTextEdit()
         self.output.setReadOnly(True)
         self.analyze_button.clicked.connect(self.start_analysis)
 
+        self.section_title = make_section_title("")
         layout = QVBoxLayout(self)
-        layout.addWidget(make_section_title("Analyze Video"))
+        layout.addWidget(self.section_title)
         layout.addWidget(self.file_picker)
         layout.addWidget(self.analyze_button)
         layout.addWidget(self.output, 1)
+        self.retranslate()
 
     def start_analysis(self) -> None:
+        language = self.settings.language
         path = self.file_picker.path()
         if not path:
-            QMessageBox.warning(self, "Missing file", "Choose a video file to analyze.")
+            QMessageBox.warning(self, t("missing_file", language), t("choose_video_to_analyze", language))
             return
-        self.output.setPlainText("Analyzing...")
+        self.output.setPlainText(t("analyzing", language))
         self.analyze_button.setEnabled(False)
         self.thread = QThread(self)
         self.worker = AnalysisWorker(path, self.settings)
@@ -49,21 +53,22 @@ class AnalysisPage(QWidget):
         self.thread.start()
 
     def on_finished(self, info: VideoInfo) -> None:
+        language = self.settings.language
         self.analyze_button.setEnabled(True)
         self.output.setPlainText(
             "\n".join(
                 [
-                    f"Path: {info.path}",
-                    f"Readable: {info.readable}",
-                    f"Duration: {info.duration or 'unknown'}",
-                    f"Video codec: {info.codec_video or 'none'}",
-                    f"Audio codec: {info.codec_audio or 'none'}",
-                    f"Resolution: {info.width or '?'}x{info.height or '?'}",
-                    f"FPS: {info.fps or 'unknown'}",
-                    f"Has video: {info.has_video}",
-                    f"Has audio: {info.has_audio}",
-                    f"Moov atom missing: {info.moov_atom_missing}",
-                    f"Error: {info.error_message or 'none'}",
+                    f"{t('path', language)}: {info.path}",
+                    f"{t('readable', language)}: {self._yes_no(info.readable)}",
+                    f"{t('duration', language)}: {info.duration or t('unknown', language)}",
+                    f"{t('video_codec', language)}: {info.codec_video or t('none', language)}",
+                    f"{t('audio_codec', language)}: {info.codec_audio or t('none', language)}",
+                    f"{t('resolution', language)}: {info.width or '?'}x{info.height or '?'}",
+                    f"{t('fps', language)}: {info.fps or t('unknown', language)}",
+                    f"{t('has_video', language)}: {self._yes_no(info.has_video)}",
+                    f"{t('has_audio', language)}: {self._yes_no(info.has_audio)}",
+                    f"{t('moov_atom_missing', language)}: {self._yes_no(info.moov_atom_missing)}",
+                    f"{t('error', language)}: {info.error_message or t('none', language)}",
                 ]
             )
         )
@@ -75,3 +80,12 @@ class AnalysisPage(QWidget):
     def _clear_refs(self) -> None:
         self.thread = None
         self.worker = None
+
+    def retranslate(self) -> None:
+        language = self.settings.language
+        self.file_picker.retranslate(t("video_file", language), language)
+        self.analyze_button.setText(t("analyze", language))
+        self.section_title.setText(t("analyze_video", language))
+
+    def _yes_no(self, value: bool) -> str:
+        return t("yes" if value else "no", self.settings.language)
