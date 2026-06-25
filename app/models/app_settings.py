@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import shutil
+import sys
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
@@ -51,10 +52,13 @@ class AppSettings:
 
     @staticmethod
     def _resolve_tool(configured_path: str, binary_name: str) -> str:
+        bundled = AppSettings._bundled_tool(binary_name)
+        if _is_frozen() and bundled.exists():
+            return str(bundled)
+
         if configured_path and Path(configured_path).exists():
             return configured_path
 
-        bundled = Path(__file__).resolve().parents[1] / "assets" / "ffmpeg" / binary_name
         if bundled.exists():
             return str(bundled)
 
@@ -65,8 +69,16 @@ class AppSettings:
         fallback_name = binary_name[:-4] if binary_name.lower().endswith(".exe") else binary_name
         return shutil.which(fallback_name) or fallback_name
 
+    @staticmethod
+    def _bundled_tool(binary_name: str) -> Path:
+        return Path(__file__).resolve().parents[1] / "assets" / "ffmpeg" / binary_name
+
 
 def _is_windows() -> bool:
     import os
 
     return os.name == "nt"
+
+
+def _is_frozen() -> bool:
+    return bool(getattr(sys, "frozen", False))

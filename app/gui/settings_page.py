@@ -24,9 +24,9 @@ class SettingsPage(QWidget):
         super().__init__()
         self.settings = settings
 
-        self.ffmpeg_path = self._path_row(settings.ffmpeg_path)
-        self.ffprobe_path = self._path_row(settings.ffprobe_path)
-        self.untrunc_path = self._path_row(settings.untrunc_path)
+        self.ffmpeg_path = self._path_row(settings.resolve_ffmpeg())
+        self.ffprobe_path = self._path_row(settings.resolve_ffprobe())
+        self.untrunc_path = self._path_row(settings.resolve_untrunc())
         self.output_folder = self._path_row(settings.default_output_folder, folder=True)
 
         self.default_mode = QComboBox()

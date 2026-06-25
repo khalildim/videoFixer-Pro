@@ -1,21 +1,88 @@
-MIT License
+VideoFixer Pro Freeware Non-Commercial License
 
 Copyright (c) 2026 khalildim
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This license applies to the VideoFixer Pro application source code,
+documentation, user interface, project files, installers, binaries, and
+original assets included in this repository or official releases, except where
+a third-party license is stated.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. Free Personal Use
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+VideoFixer Pro is freeware for personal, educational, and other non-commercial
+use. You may download, install, and use official copies of VideoFixer Pro for
+free.
+
+You may view and modify the source code for your own private, non-commercial
+use only.
+
+2. No Commercial Use
+
+You may not use VideoFixer Pro, modified versions of VideoFixer Pro, or
+substantial parts of the project for commercial purposes without prior written
+permission from the copyright holder.
+
+Commercial purposes include, but are not limited to:
+
+- selling, renting, leasing, sublicensing, or monetizing the software;
+- using the software as part of a paid service, paid product, paid repair
+  workflow, paid support offering, or commercial business operation;
+- including the software in another commercial product, installer, package,
+  marketplace listing, or hosted service;
+- using the software to generate revenue directly or indirectly.
+
+3. No Redistribution Or Republishing
+
+You may not redistribute, republish, mirror, upload, share, sell, resell, or
+make available copies of VideoFixer Pro without prior written permission from
+the copyright holder.
+
+This restriction applies to:
+
+- source code;
+- installers;
+- executable binaries;
+- modified versions;
+- forks or derivative works;
+- packaged builds;
+- copies hosted on websites, repositories, file-sharing services, marketplaces,
+  app stores, or software bundles.
+
+4. No Removal Of Notices
+
+You may not remove, hide, or alter copyright notices, license text, third-party
+notices, attribution, names, logos, or other ownership information included with
+VideoFixer Pro.
+
+5. Permission Requests
+
+Commercial use, redistribution, republishing, resale, inclusion in another
+product, or any use outside this license requires prior written permission from
+the copyright holder.
+
+Permission requests may be sent through the project owner's public contact
+channels.
+
+6. Third-Party Components
+
+Third-party components, libraries, tools, and binaries included with or used by
+VideoFixer Pro are licensed by their respective owners under their own license
+terms. This license does not change or restrict any rights you may have under
+those third-party licenses.
+
+See THIRD_PARTY_NOTICES.md for additional information.
+
+7. No Warranty
+
+VideoFixer Pro is provided "as is", without warranty of any kind, express or
+implied, including but not limited to warranties of merchantability, fitness for
+a particular purpose, and non-infringement.
+
+Video repair and recovery are not guaranteed. If media data is missing or too
+damaged, no software can recreate it perfectly.
+
+8. Limitation Of Liability
+
+To the maximum extent permitted by law, the copyright holder is not liable for
+any claim, damage, data loss, lost profits, business interruption, or other
+liability arising from use of, inability to use, or reliance on VideoFixer Pro.

@@ -7,6 +7,9 @@ venv/
 env/
 
 .download-tools/
+build/
+dist/
+installer/
 output/
 *.log
 
@@ -15,3 +18,5 @@ app/assets/ffmpeg/*.exe
 app/assets/ffmpeg/*.dll
 app/assets/ffmpeg/*.zip
 app/assets/ffmpeg/*.7z
+VideoFixerPro.iss
+VideoFixerPro.spec

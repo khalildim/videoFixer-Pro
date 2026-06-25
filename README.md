@@ -96,7 +96,7 @@ Do not commit large bundled binaries directly to GitHub. Download them locally o
 
 ## License
 
-VideoFixer Pro application code is licensed under the MIT License. See `LICENSE`.
+VideoFixer Pro is freeware for personal and non-commercial use only. Commercial use, redistribution, republishing, resale, modified builds, or inclusion in another product requires prior written permission. See `LICENSE`.
 
 Bundled third-party binaries have their own licenses. See `THIRD_PARTY_NOTICES.md`.
 

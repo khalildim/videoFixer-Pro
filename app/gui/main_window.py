@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 from PySide6.QtCore import QSize
+from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QListWidget, QListWidgetItem, QHBoxLayout, QMainWindow, QStackedWidget, QWidget
 
 from app.gui.analysis_page import AnalysisPage
@@ -16,6 +17,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.settings = AppSettings.load()
         self.setWindowTitle("VideoFixer Pro")
+        self._set_window_icon()
         self.resize(QSize(1100, 720))
 
         self.sidebar = QListWidget()
@@ -47,3 +49,10 @@ class MainWindow(QMainWindow):
         style_path = Path(__file__).with_name("styles.qss")
         if style_path.exists():
             self.setStyleSheet(style_path.read_text(encoding="utf-8"))
+
+    def _set_window_icon(self) -> None:
+        icon_dir = Path(__file__).resolve().parents[1] / "assets" / "icon"
+        for icon_path in (icon_dir / "icon.ico", icon_dir / "icon.png"):
+            if icon_path.exists():
+                self.setWindowIcon(QIcon(str(icon_path)))
+                break
