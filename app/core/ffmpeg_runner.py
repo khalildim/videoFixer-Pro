@@ -12,6 +12,10 @@ ProgressCallback = Callable[[int], None]
 LogCallback = Callable[[str], None]
 
 
+def _creation_flags() -> int:
+    return subprocess.CREATE_NO_WINDOW if hasattr(subprocess, "CREATE_NO_WINDOW") else 0
+
+
 @dataclass(frozen=True)
 class CommandResult:
     return_code: int
@@ -43,6 +47,7 @@ def run_command(
         encoding="utf-8",
         errors="replace",
         bufsize=1,
+        creationflags=_creation_flags(),
     )
 
     lines: list[str] = []
@@ -86,6 +91,7 @@ def run_capture(cmd: list[str], timeout: int = 60) -> CommandResult:
             errors="replace",
             timeout=timeout,
             check=False,
+            creationflags=_creation_flags(),
         )
     except subprocess.TimeoutExpired as exc:
         output = exc.stdout or ""
