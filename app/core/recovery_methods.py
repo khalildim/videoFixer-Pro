@@ -4,6 +4,7 @@ import threading
 import time
 from pathlib import Path
 
+from app.core.analyzer import analyze_video
 from app.core.ffmpeg_runner import LogCallback, ProgressCallback, run_command
 from app.core.file_utils import ensure_output_folder, unique_output_path
 from app.models.app_settings import AppSettings
@@ -111,7 +112,7 @@ def repair_with_untrunc(
     cmd = _untrunc_command(settings, reference_path, damaged_path, output_file)
     result = run_command(cmd, cwd=folder, log_callback=log_callback, progress_callback=progress_callback, cancel_event=cancel_event)
     found_output = output_file if output_file.exists() and output_file.stat().st_size > 0 else _find_untrunc_output(damaged_path, folder, start_time)
-    success = result.success and found_output is not None
+    success = _verify_untrunc_output(found_output, settings, log_callback, result.return_code)
 
     if not success and _should_retry_untrunc_with_skip(result.output):
         skip_output = unique_output_path(damaged_path, folder, "untrunc_skip", damaged_path.suffix or ".mp4")
@@ -126,7 +127,7 @@ def repair_with_untrunc(
         )
         result = retry_result
         found_output = skip_output if skip_output.exists() and skip_output.stat().st_size > 0 else _find_untrunc_output(damaged_path, folder, start_time)
-        success = retry_result.success and found_output is not None
+        success = _verify_untrunc_output(found_output, settings, log_callback, retry_result.return_code)
 
     if log_callback and not found_output:
         expected = _expected_untrunc_outputs(damaged_path, folder)
@@ -159,6 +160,22 @@ def _untrunc_command(
 def _should_retry_untrunc_with_skip(output: str) -> bool:
     lower = output.lower()
     return "try '-s'" in lower or "unknown sequences" in lower or "assertion" in lower
+
+
+def _verify_untrunc_output(
+    output_file: Path | None,
+    settings: AppSettings,
+    log_callback: LogCallback | None,
+    return_code: int,
+) -> bool:
+    if not output_file or not output_file.exists() or output_file.stat().st_size == 0:
+        return False
+
+    if return_code != 0 and log_callback:
+        log_callback("Untrunc created an output file despite a non-zero exit code. Verifying the repaired file with FFprobe...")
+
+    analysis = analyze_video(str(output_file), settings)
+    return analysis.readable and analysis.has_video
 
 
 def extract_streams(
